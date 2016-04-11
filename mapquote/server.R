@@ -11,7 +11,7 @@ library(shiny)
 library(timeSeries)
 suppressPackageStartupMessages(library(googleVis))
 options("getSymbols.warning4.0"=FALSE)
-source("")
+source("./get_data.R")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
