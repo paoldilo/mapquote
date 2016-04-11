@@ -16,26 +16,56 @@ source("./get_data.R")
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
      #read the data from the fields
-     selected_date <- reactive({
-          input$date_select
-          selected_date
-     })
+     
+     if (input$ptype=='Single Date') {
+          selected_date <- reactive({
+               input$date_select
+               selected_date
+          })
      
      
-  output$distPlot <- renderGvis({
-       #get only one row and convert it to dataframe
-       dataToPlot <- as.data.frame(total[53,])
-       dataToPlot <- as.data.frame(t(dataToPlot))
-       dataToPlot <- cbind(row.names(dataToPlot),dataToPlot)
-       names(dataToPlot)<- c("Country","Value")
-       dataToPlot$Country<- sub("\\."," ",dataToPlot$Country)
-       dataToPlot$Perc <- paste0(sprintf("%.2f", round(dataToPlot$Value,2)),"%")
-       #plot with google Vis
-        gvisGeoChart(dataToPlot, locationvar='Country', colorvar='Value',hovervar = 'Perc',
+          output$distPlot <- renderGvis({
+          #get only one row and convert it to dataframe
+          dataToPlot <- as.data.frame(total[53,])
+          dataToPlot <- as.data.frame(t(dataToPlot))
+          dataToPlot <- cbind(row.names(dataToPlot),dataToPlot)
+          names(dataToPlot)<- c("Country","Value")
+          dataToPlot$Country<- sub("\\."," ",dataToPlot$Country)
+          dataToPlot$Perc <- paste0(sprintf("%.2f", round(dataToPlot$Value,2)),"%")
+          #plot with google Vis
+          gvisGeoChart(dataToPlot, locationvar='Country', colorvar='Value',hovervar = 'Perc',
                            options=list(projection="kavrayskiy-vii",
                                         colorAxis="{values:[-4,0,4],
                                    colors:[\'red', \'white\', \'green']}",
                                         backgroundColor= '#81d4fa',
                                         datalessRegionColor= '#454545'))
-  })
+       })
+     } #end if
+     else
+     {
+     observe({
+          if (input$save == 0)
+                    return()
+          isolate({
+               autoInvalidate <- reactiveTimer(500, session)
+               renderGvis({
+                    autoInvalidate()
+                    #get only one row and convert it to dataframe
+                    dataToPlot <- as.data.frame(total[53,])
+                    dataToPlot <- as.data.frame(t(dataToPlot))
+                    dataToPlot <- cbind(row.names(dataToPlot),dataToPlot)
+                    names(dataToPlot)<- c("Country","Value")
+                    dataToPlot$Country<- sub("\\."," ",dataToPlot$Country)
+                    dataToPlot$Perc <- paste0(sprintf("%.2f", round(dataToPlot$Value,2)),"%")
+                    #plot with google Vis
+                    gvisGeoChart(dataToPlot, locationvar='Country', colorvar='Value',hovervar = 'Perc',
+                                 options=list(projection="kavrayskiy-vii",
+                                              colorAxis="{values:[-4,0,4],
+                                   colors:[\'red', \'white\', \'green']}",
+                                              backgroundColor= '#81d4fa',
+                                              datalessRegionColor= '#454545'))
+               })
+          })
+     })
+     }
 })
