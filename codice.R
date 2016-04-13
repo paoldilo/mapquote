@@ -117,9 +117,11 @@ total <- merge(total,as.timeSeries(australia))
 
 # convert NA to 0
 total[is.na(total)]<-0
-
+selected_date <- as.Date("2016-04-04")
 #get only eon row and convert it to dataframe
-dataToPlot <- as.data.frame(total[53,])
+vettore <- as.Date(rownames(total))==selected_date
+dataToPlot <- total[vettore,]
+dataToPlot <- as.data.frame(dataToPlot)
 dataToPlot <- as.data.frame(t(dataToPlot))
 dataToPlot <- cbind(row.names(dataToPlot),dataToPlot)
 names(dataToPlot)<- c("Country","Value")
