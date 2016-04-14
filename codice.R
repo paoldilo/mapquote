@@ -20,7 +20,7 @@ today <- Sys.Date()
 america <- getSymbols(c("^GSPC", "^GSPTSE","^BVSP","^MXX","^MERV"),src="yahoo",auto.assign = T,from=startingDate,to=today)
 europe <- getSymbols(c("^FTSE","^GDAXI","^FCHI","^MCX","FTSEMIB.MI"),src="yahoo",auto.assign = T,from=startingDate,to=today)
 asia <- getSymbols(c("^HSI","^N225","^BSESN","^AORD"),src="yahoo",auto.assign = T,from=startingDate,to=today)
-
+africa <- getSymbols(c("JSE:JSE"),src="google",auto.assign = T,from=startingDate,to=today)
 usa <- ts(GSPC)
 usa <- (diff(usa)/usa[-nrow(usa),] * 100)[,4]
 usa <- as.data.frame(usa)
@@ -80,6 +80,7 @@ uk <- (diff(uk)/uk[-nrow(uk),] * 100)[,4]
 uk <- as.data.frame(uk)
 row.names(uk) <- row.names(as.data.frame(FTSE[2:nrow(FTSE),]))
 names(uk) <- c("United Kingom")
+
 
 
 china <- ts(HSI)

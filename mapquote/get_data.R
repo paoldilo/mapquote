@@ -17,9 +17,12 @@ today <- Sys.Date()
 #for (i in length(usa_sp500[,1]):2) usa_sp500[i,1]<- (usa_sp500[i,1]-usa_sp500[i-1,1])/usa_sp500[i-1,1]*100
 #usa_sp500[1,1]<- 0
 
-america <- getSymbols(c("^GSPC", "^GSPTSE","^BVSP","^MXX","^MERV"),src="yahoo",auto.assign = T,from=startingDate,to=today)
-europe <- getSymbols(c("^FTSE","^GDAXI","^FCHI","^MCX","FTSEMIB.MI"),src="yahoo",auto.assign = T,from=startingDate,to=today)
+america <- getSymbols(c("^GSPC", "^GSPTSE","^BVSP"),src="yahoo",auto.assign = T,from=startingDate,to=today)
+america2 <- getSymbols(c("^MXX","^MERV"),src="yahoo",auto.assign = T,from=startingDate,to=today)
+europe <- getSymbols(c("^FTSE","^GDAXI","^FCHI"),src="yahoo",auto.assign = T,from=startingDate,to=today)
+europe <- getSymbols(c("^MCX","FTSEMIB.MI","^IBEX"),src="yahoo",auto.assign = T,from=startingDate,to=today)
 asia <- getSymbols(c("^HSI","^N225","^BSESN","^AORD"),src="yahoo",auto.assign = T,from=startingDate,to=today)
+africa <- getSymbols(c("JSE:JSE"),src="google",auto.assign = T,from=startingDate,to=today)
 
 usa <- ts(GSPC)
 usa <- (diff(usa)/usa[-nrow(usa),] * 100)[,4]
@@ -81,6 +84,17 @@ uk <- as.data.frame(uk)
 row.names(uk) <- row.names(as.data.frame(FTSE[2:nrow(FTSE),]))
 names(uk) <- c("United Kingom")
 
+spain <- ts(IBEX)
+spain <- (diff(spain)/spain[-nrow(spain),] * 100)[,4]
+spain <- as.data.frame(spain)
+row.names(spain) <- row.names(as.data.frame(IBEX[2:nrow(IBEX),]))
+names(spain) <- c("Spain")
+
+southafrica <- ts(`JSE:JSE`)
+southafrica <- (diff(southafrica)/southafrica[-nrow(southafrica),] * 100)[,4]
+southafrica <- as.data.frame(southafrica)
+row.names(southafrica) <- row.names(as.data.frame(`JSE:JSE`[2:nrow(`JSE:JSE`),]))
+names(southafrica) <- c("South Africa")
 
 china <- ts(HSI)
 china <- (diff(china)/china[-nrow(china),] * 100)[,4]
@@ -111,6 +125,8 @@ total <- merge(total,as.timeSeries(russia))
 total <- merge(total,as.timeSeries(france))
 total <- merge(total,as.timeSeries(italy))
 total <- merge(total,as.timeSeries(uk))
+total <- merge(total,as.timeSeries(spain))
+total <- merge(total,as.timeSeries(southafrica))
 total <- merge(total,as.timeSeries(china))
 total <- merge(total,as.timeSeries(india))
 total <- merge(total,as.timeSeries(australia))

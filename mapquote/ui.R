@@ -1,40 +1,22 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
 
 library(shiny)
 library(rCharts)
 shinyUI(fluidPage(
-     titlePanel("Get stock indexes quotes on map"),
+     titlePanel("Get 15 major stock indexes quotes on world map by date"),
      sidebarLayout(
           sidebarPanel(
-               helpText("Select a working date on calendar to see major world stock indexes"),
-               #radioButtons("ptype", "Select plot type:",choices = c("Single Date","Animation")),
-               #conditionalPanel("input.ptype == 'Single Date'",
-#               dateInput("date_select", "Label", value = Sys.Date()-1, min = NULL, max = NULL, startview = "month", language = "en"),
-#               ),
-#               conditionalPanel("input.ptype == 'Animation'",
-#                    dateRangeInput("date", "Date range:",
-#                            start  = "2016-01-01",
-#                            end    = Sys.Date()-1,
-#                            min    = "2016-01-01",
-#                            max    = Sys.Date()-1,
-#                            format = "dd/mm/yy",
-#                            separator = " - "),
-#                    actionButton("animate","Start Animation")
-#                    )
-#               actionButton("animate","Start Animation"),
+               helpText("Select a  date on calendar to see major world stock indexes or press the play button underneath the slider to see the animation"),
 
-               sliderInput("Year", "Election year to be displayed:", 
-               min=as.Date("01/05/16",format="%m/%d/%y"), max=Sys.Date()-1, value=Sys.Date()-1,animate=TRUE,timeFormat="%F")
+               sliderInput("Year", "Date to be displayed:", 
+                    min=as.Date("01/05/16",format="%m/%d/%y"), max=Sys.Date()-1, 
+                    value=Sys.Date()-1,animate=animationOptions(interval = 2000, 
+                    loop = FALSE), timeFormat="%F")
+               
      ),
      mainPanel(
-          htmlOutput("distPlot"),
-          verbatimTextOutput("date_O")
+          h3("Stock indexes world map"),
+          verbatimTextOutput("date_O"),
+          htmlOutput("distPlot")
+          
      )
 )))
